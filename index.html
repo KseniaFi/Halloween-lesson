@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halloween Experience</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000;
+            color: #fff;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .video-container video {
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+        }
+        
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: -1;
+        }
+        
+        .content {
+            position: relative;
+            z-index: 1;
+            padding: 0 15px 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            justify-content: flex-end;
+        }
+        
+        .audio-section {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        
+        .audio-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .audio-icon {
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            filter: drop-shadow(0 0 8px rgba(255, 117, 24, 0.7));
+        }
+        
+        .audio-icon:hover {
+            transform: scale(1.1);
+        }
+        
+        .player-controls {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 20px;
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            margin-bottom: 10px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background-color: #ff7518;
+            width: 0%;
+            transition: width 0.1s;
+        }
+        
+        .time-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+        
+        .time-display {
+            display: flex;
+            gap: 15px;
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+        
+        .skip-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .skip-btn {
+            background: rgba(255, 117, 24, 0.3);
+            border: 1px solid #ff7518;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+        }
+        
+        .skip-btn:hover {
+            background: rgba(255, 117, 24, 0.5);
+        }
+        
+        .subtitle-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        
+        .subtitle-btn {
+            background: rgba(255, 117, 24, 0.7);
+            border: 1px solid #ff7518;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        
+        .subtitle-btn:hover {
+            background: rgba(255, 117, 24, 0.9);
+        }
+        
+        .subtitle-btn:disabled {
+            background: rgba(255, 117, 24, 0.3);
+            cursor: not-allowed;
+        }
+        
+        .subtitles-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .subtitles {
+            background-color: rgba(0, 0, 0, 0.75);
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 1.3rem;
+            line-height: 1.6;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #ff7518;
+            box-shadow: 0 0 20px rgba(255, 117, 24, 0.5);
+        }
+        
+        .sentence {
+            display: none;
+            text-align: center;
+            width: 100%;
+        }
+        
+        .sentence.active {
+            display: block;
+        }
+        
+        .word {
+            opacity: 0.5;
+            transition: opacity 0.3s, color 0.3s, text-shadow 0.3s;
+            display: inline-block;
+            margin: 0 2px;
+        }
+        
+        .word.active {
+            opacity: 1;
+            color: #ff9518;
+            text-shadow: 0 0 8px rgba(255, 149, 24, 0.9);
+        }
+        
+        /* Адаптация для мобильных устройств */
+        @media (max-width: 768px) {
+            .content {
+                padding: 0 10px 20px;
+            }
+            
+            .audio-icon {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .subtitles {
+                font-size: 1.1rem;
+                padding: 15px;
+                min-height: 100px;
+            }
+            
+            .player-controls {
+                max-width: 90%;
+            }
+            
+            .subtitle-controls {
+                flex-wrap: wrap;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .subtitles {
+                font-size: 1rem;
+                padding: 12px;
+                min-height: 90px;
+            }
+            
+            .audio-icon {
+                width: 45px;
+                height: 45px;
+            }
+            
+            .time-display {
+                font-size: 0.8rem;
+            }
+            
+            .skip-btn {
+                padding: 4px 8px;
+                font-size: 0.7rem;
+            }
+            
+            .subtitle-btn {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="video-container">
+        <video autoplay muted loop id="backgroundVideo">
+            <source src="Photos/InShot_20251019_203914201.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="overlay"></div>
+    </div>
+    
+    <div class="content">
+        <div class="audio-section">
+            <div class="audio-controls">
+                <img src="Photos/IMG_20251020_193449_767.png" alt="Audio Icon" class="audio-icon" id="audioIcon">
+                <audio id="halloweenAudio">
+                    <source src="Photos/2025-10-20-005529_108601.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+            
+            <div class="player-controls">
+                <div class="progress-container" id="progressContainer">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+                
+                <div class="time-controls">
+                    <div class="time-display">
+                        <span id="currentTime">0:00</span>
+                        <span>/</span>
+                        <span id="duration">0:00</span>
+                    </div>
+                    
+                    <div class="skip-buttons">
+                        <button class="skip-btn" id="rewindBtn">-10s</button>
+                        <button class="skip-btn" id="forwardBtn">+10s</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="subtitle-controls">
+                <button class="subtitle-btn" id="prevSubtitleBtn">Предыдущий</button>
+                <button class="subtitle-btn" id="nextSubtitleBtn">Следующий</button>
+            </div>
+            
+            <div class="subtitles-container">
+                <div class="subtitles" id="subtitles">
+                    <!-- Subtitles will appear here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const audio = document.getElementById('halloweenAudio');
+            const audioIcon = document.getElementById('audioIcon');
+            const subtitles = document.getElementById('subtitles');
+            const progressBar = document.getElementById('progressBar');
+            const progressContainer = document.getElementById('progressContainer');
+            const currentTimeElement = document.getElementById('currentTime');
+            const durationElement = document.getElementById('duration');
+            const rewindBtn = document.getElementById('rewindBtn');
+            const forwardBtn = document.getElementById('forwardBtn');
+            const prevSubtitleBtn = document.getElementById('prevSubtitleBtn');
+            const nextSubtitleBtn = document.getElementById('nextSubtitleBtn');
+            const video = document.getElementById('backgroundVideo');
+            
+            // Точные временные метки для субтитров
+            const subtitleData = [
+                {
+                    start: 0,
+                    end: 8,
+                    text: "Hello, friends! Halloween is a special day some people celebrate every year. Can you tell me anything about Halloween?"
+                },
+                {
+                    start: 12,
+                    end: 20,
+                    text: "When people celebrate Halloween, they put a light inside a pumpkin to make it shine. Do you know the word for that light? It is called a candle."
+                },
+                {
+                    start: 24,
+                    end: 36,
+                    text: "A jack-o'-lantern is a carved pumpkin lantern traditionally associated with Halloween. If you met a talking pumpkin, what would you ask it in a simple question? Have you ever drawn a pumpkin or a ghost? Tell me about your drawing."
+                },
+                {
+                    start: 40,
+                    end: 44,
+                    text: 'Do you know what the phrase "trick or treat" means?'
+                },
+                {
+                    start: 48,
+                    end: 64,
+                    text: 'Trick-or-treating is a popular Halloween tradition where children dress up in costumes and go door to door in their neighborhoods, saying the phrase "trick or treat." The phrase means that the children are asking for a treat, usually candy, and if they don\'t get one, they might play a small trick on the homeowner. This custom is a fun part of Halloween celebrations when kids collect sweets from their neighbours.'
+                },
+                {
+                    start: 68,
+                    end: 80,
+                    text: "Halloween costumes are a big part of the fun during Halloween celebrations. Children love to dress up as their favourite movie characters or spooky creatures. If you could choose any Halloween costume, what would it be?"
+                }
+            ];
+            
+            let currentSubtitleIndex = 0;
+            let wordInterval;
+            
+            // Форматирование времени в мм:сс
+            function formatTime(seconds) {
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+            }
+            
+            // Обновление прогресс-бара и времени
+            function updateProgress() {
+                if (audio.duration) {
+                    const progress = (audio.currentTime / audio.duration) * 100;
+                    progressBar.style.width = `${progress}%`;
+                    currentTimeElement.textContent = formatTime(audio.currentTime);
+                }
+            }
+            
+            // Создание элементов для субтитров
+            function createSubtitles() {
+                subtitles.innerHTML = '';
+                
+                subtitleData.forEach((data, index) => {
+                    const sentenceDiv = document.createElement('div');
+                    sentenceDiv.className = 'sentence';
+                    sentenceDiv.id = `sentence-${index}`;
+                    
+                    // Разбиваем текст на слова и создаем спаны для каждого
+                    const words = data.text.split(' ');
+                    words.forEach(word => {
+                        const wordSpan = document.createElement('span');
+                        wordSpan.className = 'word';
+                        wordSpan.textContent = word + ' ';
+                        sentenceDiv.appendChild(wordSpan);
+                    });
+                    
+                    subtitles.appendChild(sentenceDiv);
+                });
+            }
+            
+            // Показать субтитр по индексу
+            function showSubtitle(index) {
+                // Скрываем все субтитры
+                document.querySelectorAll('.sentence').forEach(sentence => {
+                    sentence.classList.remove('active');
+                });
+                
+                // Сбрасываем подсветку слов
+                document.querySelectorAll('.word').forEach(word => {
+                    word.classList.remove('active');
+                });
+                
+                // Показываем выбранный субтитр
+                currentSubtitleIndex = index;
+                const currentSentence = document.getElementById(`sentence-${currentSubtitleIndex}`);
+                if (currentSentence) {
+                    currentSentence.classList.add('active');
+                    
+                    // Перематываем аудио на начало этого субтитра
+                    audio.currentTime = subtitleData[currentSubtitleIndex].start;
+                    
+                    // Запускаем подсветку слов
+                    highlightWordsForSubtitle(currentSubtitleIndex);
+                }
+                
+                // Обновляем состояние кнопок
+                updateSubtitleButtons();
+            }
+            
+            // Подсветка слов для текущего субтитра
+            function highlightWordsForSubtitle(subtitleIndex) {
+                const sentence = document.getElementById(`sentence-${subtitleIndex}`);
+                if (!sentence) return;
+                
+                const words = sentence.querySelectorAll('.word');
+                const subtitle = subtitleData[subtitleIndex];
+                const duration = subtitle.end - subtitle.start;
+                const wordDuration = duration / words.length;
+                
+                // Очищаем предыдущий интервал
+                if (wordInterval) clearInterval(wordInterval);
+                
+                let wordIndex = 0;
+                
+                // Запускаем подсветку слов
+                wordInterval = setInterval(() => {
+                    if (wordIndex < words.length) {
+                        // Сбрасываем все слова
+                        words.forEach(word => word.classList.remove('active'));
+                        
+                        // Подсвечиваем текущее слово
+                        words[wordIndex].classList.add('active');
+                        wordIndex++;
+                    } else {
+                        clearInterval(wordInterval);
+                    }
+                }, wordDuration * 1000);
+            }
+            
+            // Обновление состояния кнопок субтитров
+            function updateSubtitleButtons() {
+                prevSubtitleBtn.disabled = currentSubtitleIndex === 0;
+                nextSubtitleBtn.disabled = currentSubtitleIndex === subtitleData.length - 1;
+            }
+            
+            // Перемотка аудио
+            function seekAudio(percent) {
+                if (audio.duration) {
+                    audio.currentTime = percent * audio.duration;
+                }
+            }
+            
+            // Обработчик клика по прогресс-бару
+            function handleProgressClick(e) {
+                const rect = progressContainer.getBoundingClientRect();
+                const percent = (e.clientX - rect.left) / rect.width;
+                seekAudio(percent);
+                
+                // Находим субтитр, соответствующий этому времени
+                const currentTime = percent * audio.duration;
+                for (let i = 0; i < subtitleData.length; i++) {
+                    if (currentTime >= subtitleData[i].start && currentTime < subtitleData[i].end) {
+                        showSubtitle(i);
+                        break;
+                    }
+                }
+            }
+            
+            // Перемотка назад на 10 секунд
+            function rewind() {
+                audio.currentTime = Math.max(0, audio.currentTime - 10);
+                
+                // Находим субтитр, соответствующий новому времени
+                for (let i = 0; i < subtitleData.length; i++) {
+                    if (audio.currentTime >= subtitleData[i].start && audio.currentTime < subtitleData[i].end) {
+                        showSubtitle(i);
+                        break;
+                    }
+                }
+            }
+            
+            // Перемотка вперед на 10 секунд
+            function forward() {
+                audio.currentTime = Math.min(audio.duration, audio.currentTime + 10);
+                
+                // Находим субтитр, соответствующий новому времени
+                for (let i = 0; i < subtitleData.length; i++) {
+                    if (audio.currentTime >= subtitleData[i].start && audio.currentTime < subtitleData[i].end) {
+                        showSubtitle(i);
+                        break;
+                    }
+                }
+            }
+            
+            // Обновление иконки аудио в зависимости от состояния
+            function updateAudioIcon() {
+                if (audio.paused) {
+                    audioIcon.style.opacity = "0.7";
+                } else {
+                    audioIcon.style.opacity = "1";
+                }
+            }
+            
+            // Инициализация
+            function init() {
+                createSubtitles();
+                
+                // Устанавливаем общую длительность, когда метаданные загружены
+                audio.addEventListener('loadedmetadata', function() {
+                    durationElement.textContent = formatTime(audio.duration);
+                });
+                
+                // Обновление времени и прогресса
+                audio.addEventListener('timeupdate', function() {
+                    updateProgress();
+                    
+                    // Проверяем, не вышел ли текущий субтитр за пределы времени
+                    const currentSubtitle = subtitleData[currentSubtitleIndex];
+                    if (audio.currentTime < currentSubtitle.start || audio.currentTime >= currentSubtitle.end) {
+                        // Находим правильный субтитр для текущего времени
+                        for (let i = 0; i < subtitleData.length; i++) {
+                            if (audio.currentTime >= subtitleData[i].start && audio.currentTime < subtitleData[i].end) {
+                                showSubtitle(i);
+                                break;
+                            }
+                        }
+                    }
+                });
+                
+                // Сброс при завершении аудио
+                audio.addEventListener('ended', function() {
+                    progressBar.style.width = '0%';
+                    currentTimeElement.textContent = '0:00';
+                    updateAudioIcon();
+                    
+                    // Сбрасываем субтитры
+                    if (wordInterval) clearInterval(wordInterval);
+                    document.querySelectorAll('.word').forEach(word => {
+                        word.classList.remove('active');
+                    });
+                });
+                
+                // Переключение воспроизведения аудио
+                audioIcon.addEventListener('click', function() {
+                    if (audio.paused) {
+                        audio.play();
+                        video.play();
+                    } else {
+                        audio.pause();
+                    }
+                    updateAudioIcon();
+                });
+                
+                // Клик по прогресс-бару для перемотки
+                progressContainer.addEventListener('click', handleProgressClick);
+                
+                // Кнопки перемотки
+                rewindBtn.addEventListener('click', rewind);
+                forwardBtn.addEventListener('click', forward);
+                
+                // Кнопки переключения субтитров
+                prevSubtitleBtn.addEventListener('click', function() {
+                    if (currentSubtitleIndex > 0) {
+                        showSubtitle(currentSubtitleIndex - 1);
+                    }
+                });
+                
+                nextSubtitleBtn.addEventListener('click', function() {
+                    if (currentSubtitleIndex < subtitleData.length - 1) {
+                        showSubtitle(currentSubtitleIndex + 1);
+                    }
+                });
+                
+                // Обновление иконки при паузе/воспроизведении
+                audio.addEventListener('play', updateAudioIcon);
+                audio.addEventListener('pause', updateAudioIcon);
+                
+                // Показываем первый субтитр
+                showSubtitle(0);
+                
+                // Автоматическое воспроизведение при загрузке
+                setTimeout(() => {
+                    audio.play().catch(e => {
+                        console.log("Autoplay prevented, waiting for user interaction");
+                    });
+                }, 1000);
+            }
+            
+            // Запускаем инициализацию
+            init();
+        });
+    </script>
+</body>
+</html>
