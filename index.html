@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halloween PDF Generator</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Boogaloo&family=Gochi+Hand&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Gochi Hand', cursive;
+            background: #1a1a2e;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .page-container {
+            position: relative;
+            width: 210mm;
+            height: 297mm;
+            margin: 20px auto;
+        }
+
+        .background-layer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: url('Photos/IMG_20251020_193039_262.jpg');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.08;
+            z-index: 1;
+            border-radius: 10px;
+        }
+
+        .content-layer {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+            padding: 30mm;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 15mm;
+        }
+
+        .header h1 {
+            font-family: 'Boogaloo', cursive;
+            font-size: 48px;
+            color: #ff6b35;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            letter-spacing: 1.5px;
+        }
+
+        .content-section {
+            margin-bottom: 8mm;
+            padding: 5mm;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-family: 'Boogaloo', cursive;
+            color: #2a9d8f;
+            font-size: 28px;
+            margin-bottom: 3mm;
+            border-bottom: 2px dashed #ff6b35;
+            padding-bottom: 2mm;
+        }
+
+        .text-content {
+            font-size: 20px;
+            line-height: 1.6;
+            color: #264653;
+            margin-bottom: 3mm;
+        }
+
+        .question-box {
+            background: #e9f5db;
+            padding: 3mm;
+            border-left: 4px solid #ff6b35;
+            margin: 2mm 0;
+            font-style: italic;
+        }
+
+        /* Mindmap Styles */
+        .mindmap-container {
+            display: grid;
+            grid-template-areas: 
+                "center center"
+                "top-left top-right"
+                "bottom-left bottom-right";
+            gap: 8mm;
+            margin-top: 10mm;
+        }
+
+        .mindmap-center {
+            grid-area: center;
+            text-align: center;
+            background: #ff6b35;
+            color: white;
+            padding: 5mm;
+            border-radius: 50%;
+            font-size: 24px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .mindmap-branch {
+            padding: 4mm;
+            border-radius: 15px;
+            color: white;
+            font-size: 18px;
+            text-align: center;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+        }
+
+        .branch-1 { 
+            grid-area: top-left;
+            background: #2a9d8f;
+        }
+        .branch-2 { 
+            grid-area: top-right;
+            background: #e9c46a;
+        }
+        .branch-3 { 
+            grid-area: bottom-left;
+            background: #f4a261;
+        }
+        .branch-4 { 
+            grid-area: bottom-right;
+            background: #e76f51;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .page-container, .page-container * {
+                visibility: visible;
+            }
+            .page-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <div class="background-layer"></div>
+        <div class="content-layer" id="pdf-content">
+            <div class="header">
+                <h1>🎃 Halloween Fun Guide 🎃</h1>
+            </div>
+
+            <div class="content-section">
+                <h2 class="section-title">Introduction</h2>
+                <p class="text-content">
+                    Hello, friends! Halloween is a special day some people celebrate every year. 
+                    Can you tell me anything about Halloween?
+                </p>
+            </div>
+
+            <div class="content-section">
+                <h2 class="section-title">Pumpkin Magic</h2>
+                <p class="text-content">
+                    When people celebrate Halloween, they put a light inside a pumpkin to make it shine. 
+                    Do you know the word for that light? It is called a <strong>candle</strong>.
+                </p>
+                <div class="question-box">
+                    A jack-o'-lantern is a carved pumpkin lantern traditionally associated with Halloween. 
+                    If you met a talking pumpkin, what would you ask it in a simple question?
+                </div>
+                <div class="question-box">
+                    Have you ever drawn a pumpkin or a ghost? Tell me about your drawing.
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h2 class="section-title">Trick or Treat</h2>
+                <p class="text-content">
+                    Do you know what the phrase "trick or treat" means? Trick-or-treating is a popular 
+                    Halloween tradition where children dress up in costumes and go door to door in their 
+                    neighborhoods, saying the phrase "trick or treat."
+                </p>
+                <p class="text-content">
+                    The phrase means that the children are asking for a treat, usually candy, and if they 
+                    don't get one, they might play a small trick on the homeowner. This custom is a fun 
+                    part of Halloween celebrations when kids collect sweets from their neighbours.
+                </p>
+            </div>
+
+            <div class="content-section">
+                <h2 class="section-title">Costume Fun</h2>
+                <p class="text-content">
+                    Halloween costumes are a big part of the fun during Halloween celebrations. 
+                    Children love to dress up as their favourite movie characters or spooky creatures.
+                </p>
+                <div class="question-box">
+                    If you could choose any Halloween costume, what would it be?
+                </div>
+            </div>
+
+            <!-- Mindmap Section -->
+            <div class="content-section">
+                <h2 class="section-title">Halloween Mindmap</h2>
+                <div class="mindmap-container">
+                    <div class="mindmap-center">Halloween</div>
+                    <div class="mindmap-branch branch-1">Pumpkins<br>& Candles</div>
+                    <div class="mindmap-branch branch-2">Trick or Treat<br>Tradition</div>
+                    <div class="mindmap-branch branch-3">Costumes<br>& Dressing Up</div>
+                    <div class="mindmap-branch branch-4">Spooky<br>Characters</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include html2pdf library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Configuration for PDF generation
+            const options = {
+                margin: 10,
+                filename: 'halloween-guide.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { 
+                    scale: 2,
+                    useCORS: true,
+                    logging: true
+                },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            // Generate PDF automatically
+            setTimeout(() => {
+                const element = document.getElementById('pdf-content');
+                html2pdf()
+                    .set(options)
+                    .from(element)
+                    .save()
+                    .then(() => {
+                        console.log('PDF generated successfully!');
+                    });
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
