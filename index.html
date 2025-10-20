@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halloween PDF Generator</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Merriweather', serif;
+            background: #1a1a2e;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .controls {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .download-btn {
+            background: #ff6b35;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 18px;
+            font-family: 'Open Sans', sans-serif;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .download-btn:hover {
+            background: #e55a2b;
+        }
+
+        .loading {
+            display: none;
+            color: white;
+            margin-top: 10px;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .page-container {
+            position: relative;
+            width: 210mm;
+            height: 297mm;
+            margin: 10px auto;
+        }
+
+        .background-layer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: url('Photos/IMG_20251020_193039_262.jpg');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
+            z-index: 1;
+            border-radius: 10px;
+        }
+
+        .content-layer {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+            padding: 25mm;
+            background: rgba(255, 255, 255, 0.85);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .page-break {
+            page-break-after: always;
+            break-after: page;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 15mm;
+            padding-bottom: 10mm;
+            border-bottom: 3px solid #ff6b35;
+        }
+
+        .header h1 {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 42px;
+            color: #ff6b35;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            letter-spacing: 1px;
+            margin-bottom: 5mm;
+        }
+
+        .content-section {
+            margin-bottom: 8mm;
+            padding: 6mm;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            flex: 1;
+        }
+
+        .section-title {
+            font-family: 'Open Sans', sans-serif;
+            color: #2a9d8f;
+            font-size: 32px;
+            margin-bottom: 4mm;
+            border-bottom: 2px solid #ff6b35;
+            padding-bottom: 3mm;
+        }
+
+        .text-content {
+            font-size: 22px;
+            line-height: 1.7;
+            color: #2d3748;
+            margin-bottom: 4mm;
+            text-align: justify;
+        }
+
+        .text-content strong {
+            color: #ff6b35;
+            font-weight: 700;
+        }
+
+        .question-box {
+            background: rgba(233, 245, 219, 0.8);
+            padding: 4mm;
+            border-left: 4px solid #ff6b35;
+            margin: 3mm 0;
+            font-style: italic;
+            border-radius: 4px;
+            font-size: 20px;
+        }
+
+        .page-number {
+            text-align: center;
+            margin-top: auto;
+            padding-top: 5mm;
+            color: #718096;
+            font-size: 16px;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        /* Стили для печати и разрывов страниц */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .page-container, .page-container * {
+                visibility: visible;
+            }
+            .page-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                page-break-after: always;
+            }
+            .content-layer {
+                box-shadow: none;
+            }
+            .controls {
+                display: none;
+            }
+        }
+
+        .spacer {
+            flex: 1;
+        }
+
+        @media (max-width: 1200px) {
+            .page-container {
+                width: 100%;
+                height: auto;
+                min-height: 297mm;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <button class="download-btn" id="downloadPdf">📥 Скачать PDF</button>
+        <div class="loading" id="loadingText">Генерация PDF... Пожалуйста, подождите</div>
+    </div>
+
+    <!-- Страница 1 -->
+    <div class="page-container" id="page1">
+        <div class="background-layer"></div>
+        <div class="content-layer">
+            <div class="header">
+                <h1>🎃 Halloween Celebration Guide 🎃</h1>
+            </div>
+
+            <div class="content-section">
+                <h2 class="section-title">Introduction to Halloween</h2>
+                <p class="text-content">
+                    Hello, friends! Halloween is a special day some people celebrate every year. 
+                    It's a time for fun, costumes, and spooky decorations. Can you tell me anything about Halloween?
+                </p>
+                
+                <div class="spacer"></div>
+                
+                <div class="question-box">
+                    <strong>Think about:</strong> What do you already know about Halloween? 
+                    Have you ever seen Halloween decorations or costumes?
+                </div>
+            </div>
+
+            <div class="page-number">Page 1</div>
+        </div>
+    </div>
+
+    <!-- Страница 2 -->
+    <div class="page-container" id="page2">
+        <div class="background-layer"></div>
+        <div class="content-layer">
+            <div class="content-section">
+                <h2 class="section-title">Pumpkin Magic</h2>
+                <p class="text-content">
+                    When people celebrate Halloween, they often carve faces into pumpkins and put a light inside to make them shine. 
+                    Do you know the word for that light? It is called a <strong>candle</strong>.
+                </p>
+                
+                <p class="text-content">
+                    A jack-o'-lantern is a carved pumpkin lantern traditionally associated with Halloween. 
+                    People have been making jack-o'-lanterns for many years as part of Halloween traditions.
+                </p>
+
+                <div class="question-box">
+                    If you met a talking pumpkin, what would you ask it in a simple question?
+                </div>
+                
+                <div class="question-box">
+                    Have you ever drawn a pumpkin or a ghost? Tell me about your drawing. 
+                    What colors would you use? What expression would your pumpkin have?
+                </div>
+            </div>
+
+            <div class="page-number">Page 2</div>
+        </div>
+    </div>
+
+    <!-- Страница 3 -->
+    <div class="page-container" id="page3">
+        <div class="background-layer"></div>
+        <div class="content-layer">
+            <div class="content-section">
+                <h2 class="section-title">Trick or Treat Tradition</h2>
+                <p class="text-content">
+                    Do you know what the phrase "trick or treat" means? Trick-or-treating is a popular 
+                    Halloween tradition where children dress up in costumes and go door to door in their 
+                    neighborhoods, saying the phrase "trick or treat."
+                </p>
+                
+                <p class="text-content">
+                    The phrase means that the children are asking for a treat, usually candy, and if they 
+                    don't get one, they might play a small trick on the homeowner. This custom is a fun 
+                    part of Halloween celebrations when kids collect sweets from their neighbours.
+                </p>
+
+                <div class="question-box">
+                    <strong>Imagine:</strong> If you went trick-or-treating, what kind of candy would you hope to receive? 
+                    Would you prefer chocolate, gummy candies, or something else?
+                </div>
+            </div>
+
+            <div class="page-number">Page 3</div>
+        </div>
+    </div>
+
+    <!-- Страница 4 -->
+    <div class="page-container" id="page4">
+        <div class="background-layer"></div>
+        <div class="content-layer">
+            <div class="content-section">
+                <h2 class="section-title">Costume Fun</h2>
+                <p class="text-content">
+                    Halloween costumes are a big part of the fun during Halloween celebrations. 
+                    Children love to dress up as their favourite movie characters, superheroes, animals, or spooky creatures.
+                </p>
+                
+                <p class="text-content">
+                    Some people make their own costumes, while others buy them from stores. 
+                    The most important thing is to be creative and have fun with your costume choice!
+                </p>
+
+                <div class="question-box">
+                    If you could choose any Halloween costume, what would it be? 
+                    Would you be something funny, scary, or maybe a character from your favorite story?
+                </div>
+
+                <div class="question-box">
+                    <strong>Creative thinking:</strong> If you were to create your own Halloween costume 
+                    using things you have at home, what would you make?
+                </div>
+            </div>
+
+            <div class="page-number">Page 4</div>
+        </div>
+    </div>
+
+    <!-- Include html2pdf library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const downloadBtn = document.getElementById('downloadPdf');
+            const loadingText = document.getElementById('loadingText');
+            
+            // Configuration for PDF generation
+            const options = {
+                margin: 0,
+                filename: 'halloween-celebration-guide.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { 
+                    scale: 2,
+                    useCORS: true,
+                    logging: false
+                },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            // Функция генерации PDF
+            function generatePDF() {
+                loadingText.style.display = 'block';
+                downloadBtn.disabled = true;
+                downloadBtn.textContent = 'Генерация...';
+                
+                const elements = [
+                    document.getElementById('page1'),
+                    document.getElementById('page2'), 
+                    document.getElementById('page3'),
+                    document.getElementById('page4')
+                ];
+
+                const pdf = html2pdf();
+                
+                // Добавляем все страницы по порядку
+                elements.forEach((element, index) => {
+                    if (index === 0) {
+                        pdf.from(element);
+                    } else {
+                        pdf.addPage(element);
+                    }
+                });
+
+                pdf.set(options)
+                   .save()
+                   .then(() => {
+                       console.log('PDF generated successfully with 4 pages!');
+                       loadingText.style.display = 'none';
+                       downloadBtn.disabled = false;
+                       downloadBtn.textContent = '📥 Скачать PDF';
+                   })
+                   .catch(error => {
+                       console.error('PDF generation failed:', error);
+                       loadingText.textContent = 'Ошибка генерации PDF. Попробуйте еще раз.';
+                       downloadBtn.disabled = false;
+                       downloadBtn.textContent = '📥 Скачать PDF';
+                   });
+            }
+
+            // Обработчик клика по кнопке
+            downloadBtn.addEventListener('click', generatePDF);
+            
+            // Автоматическая генерация при загрузке (опционально - закомментируйте если не нужно)
+            // setTimeout(generatePDF, 1000);
+        });
+    </script>
+</body>
+</html>
