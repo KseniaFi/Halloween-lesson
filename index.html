@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maplewood Halloween Festival</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #8B4513;
+            text-align: center;
+            border-bottom: 2px solid #8B4513;
+            padding-bottom: 10px;
+        }
+        .image-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .image-caption {
+            font-style: italic;
+            color: #666;
+            margin-top: 5px;
+        }
+        .download-btn {
+            display: block;
+            width: 200px;
+            margin: 30px auto;
+            padding: 12px 20px;
+            background-color: #FF8C00;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: background-color 0.3s;
+        }
+        .download-btn:hover {
+            background-color: #E67E00;
+        }
+        @media print {
+            .download-btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>The Halloween Festival in Maplewood</h1>
+    
+    <p>The village of Maplewood is a charming little community known for its friendly people and beautiful natural surroundings. Every autumn, Maplewood transforms into a magical world, bursting with colours and joyful sounds. This special season brings everyone together to celebrate Halloween with fun and festive traditions.</p>
+    
+    <div class="image-container">
+        <img src="Photos/Screenshot_20251020_200247_Samsung Internet.jpg" alt="Maplewood village during autumn">
+        <div class="image-caption">Maplewood village during autumn</div>
+    </div>
+    
+    <p>The festival's decorations light up the streets, and children's excitement grows as they prepare their costumes. Bright orange pumpkins are placed on every doorstep, and flickering lanterns light up the village hall.</p>
+    
+    <div class="image-container">
+        <img src="Photos/Screenshot_20251020_200336_Samsung Internet.jpg" alt="Festival decorations">
+        <div class="image-caption">Festival decorations</div>
+    </div>
+    
+    <p>Mia and her brother Tom spend the afternoon carefully arranging their granny's large, bright pumpkins to prepare them for carving. Granny's pumpkins are big and bright, perfect for carving scary faces.</p>
+    
+    <div class="image-container">
+        <img src="Photos/Screenshot_20251020_200304_Samsung Internet.jpg" alt="Mia and Tom with pumpkins">
+        <div class="image-caption">Mia and Tom with pumpkins</div>
+    </div>
+    
+    <p>The village's pumpkin competition is the most popular event, and everyone hopes to win Granny's special prize. At the festival, there are many fun activities. Children can carve pumpkins, paint their faces, or make sparkling cobweb decorations.</p>
+    
+    <div class="image-container">
+        <img src="Photos/Screenshot_20251020_200254_Samsung Internet.jpg" alt="Pumpkin carving activity">
+        <div class="image-caption">Pumpkin carving activity</div>
+    </div>
+    
+    <p>The storyteller shares tales of friendly witches and magical pumpkins. The wizard's staff glows softly as the children listen carefully.</p>
+    
+    <div class="image-container">
+        <img src="Photos/Screenshot_20251020_200327_Samsung Internet.jpg" alt="Storyteller with children">
+        <div class="image-caption">Storyteller with children</div>
+    </div>
+    
+    <p>Lantern bearers walk through the village carrying glowing lanterns shaped like bats, ghosts, and witches' hats. Music plays as the parade moves past the school and the old library.</p>
+    
+    <div class="image-container">
+        <img src="Photos/Screenshot_20251020_200332_Samsung Internet.jpg" alt="Lantern parade">
+        <div class="image-caption">Lantern parade</div>
+    </div>
+    
+    <p>The festival's magic fills the air, making everyone feel happy and brave. At the end of the night, fireworks light up the sky with orange, purple, and green colours. The village's Halloween festival is a night full of joy, magic, and friendship.</p>
+    
+    <div class="image-container">
+        <img src="Photos/Screenshot_20251020_200342_Samsung Internet.jpg" alt="Fireworks display">
+        <div class="image-caption">Fireworks display</div>
+    </div>
+    
+    <a href="#" class="download-btn" onclick="generatePDF()">Download as PDF</a>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        function generatePDF() {
+            const element = document.body;
+            const opt = {
+                margin: 1,
+                filename: 'Maplewood_Halloween_Festival.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            
+            html2pdf().set(opt).from(element).save();
+        }
+    </script>
+</body>
+</html>
