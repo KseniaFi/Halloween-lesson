@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halloween Matching Task</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Times New Roman', serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+            color: #333;
+            width: 100%;
+        }
+        
+        #print-content {
+            width: 794px;
+            min-height: 1123px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #8B4513;
+            font-size: 32px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #8B4513;
+        }
+        
+        .instructions {
+            text-align: center;
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: #5a3921;
+            line-height: 1.4;
+        }
+        
+        .matching-area {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            min-height: 600px;
+        }
+        
+        .column {
+            width: 48%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .column-title {
+            text-align: center;
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #8B4513;
+            font-weight: bold;
+        }
+        
+        .card {
+            border: 2px solid #8B4513;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #fff8e1;
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+        
+        .image-card {
+            height: 120px;
+            background-color: #f9f9f9;
+        }
+        
+        .image-card img {
+            max-width: 90%;
+            max-height: 100px;
+            display: block;
+            object-fit: contain;
+        }
+        
+        .word-card {
+            height: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #8B4513;
+            text-align: center;
+            padding: 5px;
+        }
+        
+        .signature-area {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px dashed #8B4513;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .signature-line {
+            width: 180px;
+            border-bottom: 1px solid #8B4513;
+            text-align: center;
+            padding-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        button {
+            background-color: #8B4513;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #a0522d;
+        }
+        
+        .placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            width: 100%;
+            color: #666;
+            font-size: 14px;
+            text-align: center;
+            padding: 10px;
+        }
+        
+        @media print {
+            body {
+                padding: 0;
+                background: white;
+            }
+            
+            #print-content {
+                box-shadow: none;
+                margin: 0;
+                padding: 25px;
+                width: 100%;
+                height: 100%;
+            }
+            
+            .button-container {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="print-content">
+        <h1>Halloween Matching Task</h1>
+        <p class="instructions">Match the Halloween images on the left with the correct words on the right by drawing lines between them.</p>
+        
+        <div class="matching-area">
+            <div class="column">
+                <div class="column-title">Images</div>
+                <div id="images-column">
+                    <!-- Карточки с изображениями будут сгенерированы здесь -->
+                </div>
+            </div>
+            
+            <div class="column">
+                <div class="column-title">Words</div>
+                <div id="words-column">
+                    <!-- Карточки со словами будут сгенерированы здесь -->
+                </div>
+            </div>
+        </div>
+        
+        <div class="signature-area">
+            <div class="signature-line">Name: ___________________</div>
+            <div class="signature-line">Date: ___________________</div>
+            <div class="signature-line">Score: ___________________</div>
+        </div>
+    </div>
+
+    <div class="button-container">
+        <button id="print-page">Print Page</button>
+    </div>
+
+    <script>
+        // Данные для карточек с вашими изображениями
+        const halloweenItems = [
+            { image: "Photos/IMG_20251020_175109_595.jpg", label: "Monster" },
+            { image: "Photos/IMG_20251020_123050_219.jpg", label: "Spider" },
+            { image: "Photos/IMG_20251020_122957_466.jpg", label: "Mummy" },
+            { image: "Photos/IMG_20251019_161943_247.jpg", label: "Wizard" },
+            { image: "Photos/IMG_20251019_161657_379.jpg", label: "Scarecrow" },
+            { image: "Photos/IMG_20251019_161133_941.jpg", label: "Fireworks" },
+            { image: "Photos/IMG_20251019_161047_687.jpg", label: "Bat" },
+            { image: "Photos/IMG_20251019_160956_540.jpg", label: "Vampire" },
+            { image: "Photos/IMG_20251019_160820_005.jpg", label: "Ghost" },
+            { image: "Photos/IMG_20251019_160644_141.jpg", label: "Witch" },
+            { image: "Photos/IMG_20251019_160545_015.jpg", label: "Jack-o'-lantern" },
+            { image: "Photos/IMG_20251020_192659_254.jpg", label: "Pumpkin" }
+        ];
+
+        // Функция для перемешивания массива
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Генерация карточек
+        function generateCards() {
+            const imagesColumn = document.getElementById('images-column');
+            const wordsColumn = document.getElementById('words-column');
+
+            // Создаем карточки с изображениями (в исходном порядке)
+            halloweenItems.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card image-card';
+                
+                const img = document.createElement('img');
+                img.src = item.image;
+                img.alt = item.label;
+                
+                // Обработчик на случай, если изображение не загрузится
+                img.onerror = function() {
+                    this.style.display = 'none';
+                    const placeholder = document.createElement('div');
+                    placeholder.className = 'placeholder';
+                    placeholder.textContent = item.label;
+                    card.appendChild(placeholder);
+                };
+                
+                card.appendChild(img);
+                imagesColumn.appendChild(card);
+            });
+
+            // Создаем карточки со словами (в случайном порядке)
+            const shuffledWords = shuffleArray([...halloweenItems.map(item => item.label)]);
+            
+            shuffledWords.forEach(word => {
+                const card = document.createElement('div');
+                card.className = 'card word-card';
+                card.textContent = word;
+                wordsColumn.appendChild(card);
+            });
+        }
+
+        // Обработчик кнопки для печати
+        document.getElementById('print-page').addEventListener('click', function() {
+            window.print();
+        });
+
+        // Инициализация при загрузке страницы
+        window.onload = generateCards;
+    </script>
+</body>
+</html>
