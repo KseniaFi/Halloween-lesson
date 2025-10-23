@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maplewood Village - Autumn Traditions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Georgia', serif;
+        }
+
+        body {
+            background-image: url('Photos/IMG_20251020_193039_262.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .book-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: rgba(255, 253, 245, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            position: relative;
+        }
+
+        .audio-section {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .audio-control {
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .audio-control img {
+            width: 100%;
+            height: auto;
+            transition: transform 0.3s;
+        }
+
+        .audio-control img:hover {
+            transform: scale(1.1);
+        }
+
+        .audio-control.playing img {
+            animation: pulse 1.5s infinite;
+        }
+
+        .arrow {
+            width: 40px;
+            height: 40px;
+            position: relative;
+            animation: point 2s infinite;
+        }
+
+        .arrow::before {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-top: 4px solid #FF6600;
+            border-right: 4px solid #FF6600;
+            transform: rotate(45deg);
+            top: 8px;
+            left: 5px;
+        }
+
+        @keyframes point {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(-10px); }
+            100% { transform: translateX(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        h1 {
+            text-align: center;
+            color: #8B4513;
+            margin-bottom: 30px;
+            font-size: 1.5rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            border-bottom: 2px solid #D2691E;
+            padding-bottom: 10px;
+            padding-right: 80px; /* Add padding to prevent overlap with audio icon */
+        }
+
+        .page {
+            margin-bottom: 40px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.7);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .page-title {
+            color: #8B4513;
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+        }
+
+        .page-content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .page-text {
+            font-size: 1.1rem;
+            text-align: justify;
+        }
+
+        .page-image {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .page-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.5s;
+        }
+
+        .page-image img:hover {
+            transform: scale(1.03);
+        }
+
+        @media (min-width: 768px) {
+            .page-content {
+                flex-direction: row;
+                align-items: center;
+            }
+            
+            .page-text {
+                flex: 1;
+            }
+            
+            .page-image {
+                flex: 1;
+                max-width: 300px;
+            }
+            
+            .page:nth-child(even) .page-content {
+                flex-direction: row-reverse;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="book-container">
+        <div class="audio-section">
+            <div class="arrow"></div>
+            <div class="audio-control" id="audioControl">
+                <img src="Photos/IMG_20251020_193449_767.png" alt="Audio">
+            </div>
+        </div>
+        
+        <h1>A story about Maplewood Village and its autumn traditions</h1>
+        
+        <div class="page">
+            <h2 class="page-title">Welcome to Maplewood Village</h2>
+            <div class="page-content">
+                <div class="page-text">
+                    <p>The village of Maplewood is a charming little community known for its friendly people and beautiful natural surroundings. Every autumn, Maplewood transforms into a magical world, bursting with colours and joyful sounds. This special season brings everyone together to celebrate Halloween with fun and festive traditions.</p>
+                </div>
+                <div class="page-image">
+                    <img src="Photos/Screenshot_20251020_200247_Samsung Internet.jpg" alt="Maplewood Village">
+                </div>
+            </div>
+        </div>
+        
+        <div class="page">
+            <h2 class="page-title">Festival Decorations</h2>
+            <div class="page-content">
+                <div class="page-text">
+                    <p>The festival's decorations light up the streets, and children's excitement grows as they prepare their costumes. Bright orange pumpkins are placed on every doorstep, and flickering lanterns light up the village hall.</p>
+                </div>
+                <div class="page-image">
+                    <img src="Photos/Screenshot_20251020_200317_Samsung Internet.jpg" alt="Festival Decorations">
+                </div>
+            </div>
+        </div>
+        
+        <div class="page">
+            <h2 class="page-title">Preparing the Pumpkins</h2>
+            <div class="page-content">
+                <div class="page-text">
+                    <p>Mia and her brother Tom spend the afternoon carefully arranging their granny's large, bright pumpkins to prepare them for carving. Granny's pumpkins are big and bright, perfect for carving scary faces.</p>
+                </div>
+                <div class="page-image">
+                    <img src="Photos/Screenshot_20251020_200336_Samsung Internet.jpg" alt="Mia and Tom with pumpkins">
+                </div>
+            </div>
+        </div>
+        
+        <div class="page">
+            <h2 class="page-title">The Pumpkin Competition</h2>
+            <div class="page-content">
+                <div class="page-text">
+                    <p>The village's pumpkin competition is the most popular event, and everyone hopes to win Granny's special prize. At the festival, there are many fun activities. Children can carve pumpkins, paint their faces, or make sparkling cobweb decorations.</p>
+                </div>
+                <div class="page-image">
+                    <img src="Photos/Screenshot_20251020_200304_Samsung Internet.jpg" alt="Pumpkin competition">
+                </div>
+            </div>
+        </div>
+        
+        <div class="page">
+            <h2 class="page-title">Storytelling Time</h2>
+            <div class="page-content">
+                <div class="page-text">
+                    <p>The storyteller shares tales of friendly witches and magical pumpkins. The wizard's staff glows softly as the children listen carefully.</p>
+                </div>
+                <div class="page-image">
+                    <img src="Photos/Screenshot_20251020_200254_Samsung Internet.jpg" alt="Storyteller">
+                </div>
+            </div>
+        </div>
+        
+        <div class="page">
+            <h2 class="page-title">Lantern Parade</h2>
+            <div class="page-content">
+                <div class="page-text">
+                    <p>Lantern bearers walk through the village carrying glowing lanterns shaped like bats, ghosts, and witches' hats. Music plays as the parade moves past the school and the old library.</p>
+                </div>
+                <div class="page-image">
+                    <img src="Photos/Screenshot_20251020_200327_Samsung Internet.jpg" alt="Lantern parade">
+                </div>
+            </div>
+        </div>
+        
+        <div class="page">
+            <h2 class="page-title">Fireworks Finale</h2>
+            <div class="page-content">
+                <div class="page-text">
+                    <p>At the end of the night, fireworks light up the sky with orange, purple, and green colours. The village's Halloween festival is a night full of joy, magic, and friendship.</p>
+                </div>
+                <div class="page-image">
+                    <img src="Photos/Screenshot_20251020_200332_Samsung Internet.jpg" alt="Fireworks">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="backgroundAudio" loop>
+        <source src="Photos/2025-10-20-234157_161358.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const audioControl = document.getElementById('audioControl');
+            const backgroundAudio = document.getElementById('backgroundAudio');
+            const arrow = document.querySelector('.arrow');
+            let isPlaying = false;
+
+            audioControl.addEventListener('click', function() {
+                if (isPlaying) {
+                    backgroundAudio.pause();
+                    audioControl.classList.remove('playing');
+                    arrow.style.display = 'block'; // Show arrow again when audio stops
+                } else {
+                    backgroundAudio.play();
+                    audioControl.classList.add('playing');
+                    arrow.style.display = 'none'; // Hide arrow when audio is playing
+                }
+                isPlaying = !isPlaying;
+            });
+        });
+    </script>
+</body>
+</html>
