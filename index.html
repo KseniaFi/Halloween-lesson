@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Possessive Case Exercise</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-image: url('Photos/IMG_20251020_193039_262.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: -1;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(20, 10, 30, 0.85);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            border: 2px solid #ff6a00;
+            margin-top: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #ff6a00;
+        }
+        
+        h1 {
+            color: #ff6a00;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #ffcc89;
+        }
+        
+        .audio-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            background: rgba(255, 106, 0, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #ff6a00;
+        }
+        
+        .audio-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        audio {
+            width: 70%;
+            height: 40px;
+        }
+        
+        .exercise {
+            background: rgba(40, 20, 60, 0.7);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #5a3a7a;
+            transition: all 0.3s ease;
+        }
+        
+        .exercise:hover {
+            background: rgba(50, 30, 70, 0.8);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .sentence {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .emoji {
+            font-size: 1.5rem;
+            margin-left: 10px;
+        }
+        
+        .options {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .option {
+            padding: 10px 20px;
+            border: 2px solid #5a3a7a;
+            border-radius: 8px;
+            background: rgba(30, 15, 45, 0.8);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            color: #ffcc89;
+            flex: 1;
+            text-align: center;
+        }
+        
+        .option:hover {
+            background: rgba(80, 40, 120, 0.8);
+            transform: translateY(-2px);
+        }
+        
+        .option.correct {
+            background: #2e7d32;
+            color: white;
+            border-color: #4caf50;
+        }
+        
+        .option.incorrect {
+            background: #c62828;
+            color: white;
+            border-color: #f44336;
+            animation: shake 0.5s;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+        
+        .reset-btn {
+            display: block;
+            margin: 30px auto 10px;
+            padding: 12px 30px;
+            background: linear-gradient(to right, #ff6a00, #ff8c00);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .reset-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(to right, #ff8c00, #ff6a00);
+        }
+        
+        .score {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: #ffcc89;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .options {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .sentence {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay"></div>
+    
+    <div class="container">
+        <header>
+            <h1>Possessive Case Exercise</h1>
+            <p class="subtitle">Choose the correct possessive form for each sentence</p>
+        </header>
+        
+        <div class="audio-container">
+            <img src="Photos/IMG_20251020_193449_767.png" alt="Audio Icon" class="audio-icon">
+            <audio controls>
+                <source src="Photos/2025-10-20-005529_108601.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
+        
+        <div id="exercises-container">
+            <!-- Exercises will be generated here by JavaScript -->
+        </div>
+        
+        <button class="reset-btn" id="reset-btn">Reset Exercise</button>
+        
+        <div class="score" id="score">Score: 0/19</div>
+        
+        <footer>
+            <p>Halloween-themed Possessive Case Practice</p>
+        </footer>
+    </div>
+
+    <script>
+        // Exercise data with correct answers and emojis
+        const exercises = [
+            { sentence: "The cat … eyes are yellow.", options: ["cats’", "cat’s"], correct: 1, emoji: "🐱" },
+            { sentence: "The witch... robe is black.", options: ["witches’", "witch’s"], correct: 1, emoji: "🧙‍♀️" },
+            { sentence: "The ghost … house is old.", options: ["ghosts’", "ghost’s"], correct: 1, emoji: "👻" },
+            { sentence: "The vampire … teeth are sharp.", options: ["vampires’", "vampire’s"], correct: 1, emoji: "🧛" },
+            { sentence: "The spider … web is big.", options: ["spiders’", "spider’s"], correct: 1, emoji: "🕷️" },
+            { sentence: "The monsters … hands are dirty.", options: ["monsters’", "monster’s"], correct: 0, emoji: "👹" },
+            { sentence: "The bats … wings are black.", options: ["bats’", "bat’s"], correct: 0, emoji: "🦇" },
+            { sentence: "The skeleton … bones are white.", options: ["skeletons’", "skeleton’s"], correct: 1, emoji: "💀" },
+            { sentence: "The zombies … shoes are worn out.", options: ["zombies’", "zombie’s"], correct: 0, emoji: "🧟" },
+            { sentence: "The ghosts … eyes are spooky.", options: ["ghosts’", "ghost’s"], correct: 0, emoji: "👻" },
+            { sentence: "The witches … brooms are broken.", options: ["witches’", "witch’s"], correct: 0, emoji: "🧹" },
+            { sentence: "The cat … tail is fluffy.", options: ["cats’", "cat’s"], correct: 1, emoji: "🐱" },
+            { sentence: "The vampire … cloak is red.", options: ["vampires’", "vampire’s"], correct: 1, emoji: "🧛" },
+            { sentence: "The spiders… legs are long.", options: ["spiders’", "spider’s"], correct: 0, emoji: "🕷️" },
+            { sentence: "The monster … face is scary.", options: ["monsters’", "monster’s"], correct: 1, emoji: "👹" },
+            { sentence: "The bat … ears are sharp.", options: ["bats’", "bat’s"], correct: 1, emoji: "🦇" },
+            { sentence: "The zombie … jacket is dirty.", options: ["zombies’", "zombie’s"], correct: 1, emoji: "🧟" },
+            { sentence: "The witch... laugh is loud.", options: ["witch’s", "witches'"], correct: 0, emoji: "🧙‍♀️" },
+            { sentence: "The children...costumes are colourful.", options: ["children’s", "childrens'"], correct: 0, emoji: "🎃" }
+        ];
+
+        let score = 0;
+        let completed = 0;
+
+        // Initialize the exercises
+        function initExercises() {
+            const container = document.getElementById('exercises-container');
+            container.innerHTML = '';
+            
+            exercises.forEach((exercise, index) => {
+                const exerciseDiv = document.createElement('div');
+                exerciseDiv.className = 'exercise';
+                exerciseDiv.id = `exercise-${index}`;
+                
+                const sentenceDiv = document.createElement('div');
+                sentenceDiv.className = 'sentence';
+                sentenceDiv.innerHTML = `${exercise.sentence} <span class="emoji">${exercise.emoji}</span>`;
+                
+                const optionsDiv = document.createElement('div');
+                optionsDiv.className = 'options';
+                
+                exercise.options.forEach((option, optionIndex) => {
+                    const optionDiv = document.createElement('div');
+                    optionDiv.className = 'option';
+                    optionDiv.textContent = `${String.fromCharCode(97 + optionIndex)}) ${option}`;
+                    optionDiv.dataset.exerciseId = index;
+                    optionDiv.dataset.optionId = optionIndex;
+                    optionDiv.addEventListener('click', handleOptionClick);
+                    optionsDiv.appendChild(optionDiv);
+                });
+                
+                exerciseDiv.appendChild(sentenceDiv);
+                exerciseDiv.appendChild(optionsDiv);
+                container.appendChild(exerciseDiv);
+            });
+            
+            updateScore();
+        }
+
+        // Handle option click
+        function handleOptionClick(event) {
+            const optionDiv = event.target;
+            const exerciseId = optionDiv.dataset.exerciseId;
+            const optionId = parseInt(optionDiv.dataset.optionId);
+            const exercise = exercises[exerciseId];
+            
+            // If already completed, do nothing
+            if (document.getElementById(`exercise-${exerciseId}`).classList.contains('completed')) {
+                return;
+            }
+            
+            if (optionId === exercise.correct) {
+                // Correct answer
+                optionDiv.classList.add('correct');
+                score++;
+                completed++;
+                
+                // Mark exercise as completed
+                document.getElementById(`exercise-${exerciseId}`).classList.add('completed');
+                
+                // Disable other options in this exercise
+                const options = document.querySelectorAll(`#exercise-${exerciseId} .option`);
+                options.forEach(opt => {
+                    if (!opt.classList.contains('correct')) {
+                        opt.style.pointerEvents = 'none';
+                        opt.style.opacity = '0.5';
+                    }
+                });
+            } else {
+                // Incorrect answer
+                optionDiv.classList.add('incorrect');
+                
+                // Remove incorrect class after animation
+                setTimeout(() => {
+                    optionDiv.classList.remove('incorrect');
+                }, 2000);
+            }
+            
+            updateScore();
+        }
+
+        // Update score display
+        function updateScore() {
+            document.getElementById('score').textContent = `Score: ${score}/${exercises.length}`;
+        }
+
+        // Reset exercises
+        function resetExercises() {
+            score = 0;
+            completed = 0;
+            initExercises();
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', initExercises);
+        
+        // Add event listener to reset button
+        document.getElementById('reset-btn').addEventListener('click', resetExercises);
+    </script>
+</body>
+</html>
