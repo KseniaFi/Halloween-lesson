@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Board with Questions & Images</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: url('Photos/IMG_20251020_193039_262.jpg') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: white;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .board-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+        }
+
+        .board-image {
+            width: 100%;
+            display: block;
+        }
+
+        .question-image-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
+            transition: opacity 0.8s ease;
+        }
+
+        .question-image-container.hidden {
+            opacity: 0;
+        }
+
+        .question-image {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+        }
+
+        .answer-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .answer {
+            font-size: 28px;
+            font-weight: bold;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s, transform 0.8s;
+            line-height: 1.4;
+            padding: 15px 25px;
+            border-radius: 8px;
+            max-width: 90%;
+            background-color: rgba(0, 0, 0, 0.4);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .answer.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .chalk {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: url('Photos/Screenshot_20251020_213104_Google.png') no-repeat center center;
+            background-size: contain;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 10;
+        }
+
+        .chalk.active {
+            opacity: 1;
+        }
+
+        .question-container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .question {
+            font-size: 24px;
+            margin-bottom: 20px;
+            padding: 15px;
+            animation: pulse 2s infinite;
+            line-height: 1.5;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+            }
+            50% {
+                transform: scale(1.03);
+                text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+            }
+            100% {
+                transform: scale(1);
+                text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+            }
+        }
+
+        .timer {
+            font-size: 42px;
+            color: #ffeb3b;
+            margin-top: 10px;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(255, 235, 59, 0.7);
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 18px;
+            background: #5d4037;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        button:hover {
+            background: #8d6e63;
+        }
+
+        button:active {
+            transform: translateY(2px);
+        }
+
+        button:disabled {
+            background: #3e2723;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .progress {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #ccc;
+        }
+
+        @keyframes write {
+            0% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .writing {
+            animation: write 0.8s ease-out forwards;
+        }
+    </style>
+    
+    <!-- Подключаем библиотеку jsPDF для создания PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- Подключаем html2canvas для преобразования HTML в изображение -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="board-container">
+            <img src="Photos/IMG_20251020_201430_123.jpg" alt="Board" class="board-image">
+            <div class="question-image-container" id="questionImageContainer">
+                <img src="" alt="Question Image" class="question-image" id="questionImage">
+            </div>
+            <div class="answer-container">
+                <div class="answer" id="answerText"></div>
+            </div>
+            <div class="chalk" id="chalk"></div>
+        </div>
+        
+        <div class="question-container">
+            <div class="question" id="questionText">
+                <!-- Question will be displayed here -->
+            </div>
+            <div class="timer" id="timer">
+                <span id="countdown">10</span>
+            </div>
+            
+            <div class="controls">
+                <button id="prevBtn">Back</button>
+                <button id="resetBtn">Reset</button>
+                <button id="nextBtn">Next</button>
+                <button id="downloadPdfBtn">Download PDF</button>
+            </div>
+            
+            <div class="progress" id="progress">
+                Question 1 of 8
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Questions and answers data with images
+            const questions = [
+                {
+                    question: "1) When we say 'their granny's pumpkins', who does the pumpkins belong to?",
+                    answer: "When we say 'their granny's pumpkins', the pumpkins belong to their granny.",
+                    color: "#ffffff",
+                    image: "Photos/Screenshot_20251020_200254_Samsung Internet.jpg"
+                },
+                {
+                    question: "2) Does the 's (apostrophe S) in 'their granny's pumpkins' tell us who owns the pumpkins?",
+                    answer: "Yes, the 's in 'their granny's pumpkins' shows who owns the pumpkins.",
+                    color: "#ffeb3b",
+                    image: "Photos/Screenshot_20251020_200304_Samsung Internet.jpg"
+                },
+                {
+                    question: "3) When we say 'wizard's staff', who does the staff belong to?",
+                    answer: "When we say 'wizard's staff', the staff belongs to the wizard.",
+                    color: "#ff9800",
+                    image: "Photos/IMG_20251019_161943_247.jpg"
+                },
+                {
+                    question: "4) Does the 's (apostrophe S) in 'wizard's staff' tell us who owns the staff?",
+                    answer: "Yes, the 's in 'wizard's staff' shows who owns the staff.",
+                    color: "#4caf50",
+                    image: "Photos/IMG_20251019_161943_247.jpg"
+                },
+                {
+                    question: "5) When we say 'wizard's staff' does it mean the same as 'his staff'?",
+                    answer: "Yes, 'Wizard's staff' means the same as 'his staff'.",
+                    color: "#2196f3",
+                    image: "Photos/IMG_20251019_161943_247.jpg"
+                },
+                {
+                    question: "6) Who owns the hats?",
+                    answer: "The hats belong to the witches.",
+                    color: "#9c27b0",
+                    image: "Photos/IMG_20251019_160644_141.jpg"
+                },
+                {
+                    question: "7) Are there many witches or just one?",
+                    answer: "There are many witches.",
+                    color: "#f44336",
+                    image: "Photos/IMG_20251019_160644_141.jpg"
+                },
+                {
+                    question: "8) Where does the apostrophe go when the noun is plural and ends with s?",
+                    answer: "The apostrophe goes after the s — like witches' hats.",
+                    color: "#00bcd4",
+                    image: "Photos/IMG_20251019_160644_141.jpg"
+                }
+            ];
+
+            const answerText = document.getElementById('answerText');
+            const questionText = document.getElementById('questionText');
+            const questionImage = document.getElementById('questionImage');
+            const questionImageContainer = document.getElementById('questionImageContainer');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const downloadPdfBtn = document.getElementById('downloadPdfBtn');
+            const progress = document.getElementById('progress');
+            const chalk = document.getElementById('chalk');
+            const countdownElement = document.getElementById('countdown');
+            const timerElement = document.getElementById('timer');
+
+            let currentQuestionIndex = 0;
+            let countdown;
+            let countdownValue = 10;
+
+            // Function to display the current question
+            function showQuestion(index) {
+                // Reset the timer
+                clearInterval(countdown);
+                
+                // Hide the previous answer and show question image
+                answerText.classList.remove('active');
+                answerText.classList.remove('writing');
+                chalk.classList.remove('active');
+                questionImageContainer.classList.remove('hidden');
+                
+                // Show the current question and image
+                questionText.textContent = questions[index].question;
+                questionImage.src = questions[index].image;
+                
+                // Reset and start the timer
+                countdownValue = 10;
+                countdownElement.textContent = countdownValue;
+                timerElement.style.display = 'flex';
+                
+                countdown = setInterval(function() {
+                    countdownValue--;
+                    countdownElement.textContent = countdownValue;
+                    
+                    if (countdownValue <= 0) {
+                        clearInterval(countdown);
+                        showAnswer(index);
+                    }
+                }, 1000);
+                
+                // Update progress
+                progress.textContent = `Question ${index + 1} of ${questions.length}`;
+                
+                // Update button states
+                prevBtn.disabled = index === 0;
+                nextBtn.disabled = index === questions.length - 1;
+            }
+
+            // Function to display the answer
+            function showAnswer(index) {
+                // Hide the timer and question image
+                timerElement.style.display = 'none';
+                questionImageContainer.classList.add('hidden');
+                
+                // Set the answer text and color
+                answerText.textContent = questions[index].answer;
+                answerText.style.color = questions[index].color;
+                
+                // Show the answer with animation
+                answerText.classList.add('active');
+                answerText.classList.add('writing');
+                
+                // Animate the chalk
+                animateChalk();
+            }
+
+            // Function to animate the chalk
+            function animateChalk() {
+                const boardRect = document.querySelector('.board-container').getBoundingClientRect();
+                const answerRect = answerText.getBoundingClientRect();
+                
+                // Position the chalk near the answer
+                chalk.style.top = `${answerRect.top - boardRect.top + answerRect.height/2}px`;
+                chalk.style.left = `${answerRect.left - boardRect.left - 40}px`;
+                
+                // Activate the animation
+                chalk.classList.add('active');
+                
+                // Remove the chalk after animation
+                setTimeout(() => {
+                    chalk.classList.remove('active');
+                }, 1500);
+            }
+
+            // Function to generate and download PDF
+            function generatePDF() {
+                // Create a new jsPDF instance
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                
+                // Set PDF properties
+                doc.setProperties({
+                    title: 'Questions and Answers',
+                    subject: 'Educational Content',
+                    author: 'Interactive Board App',
+                    keywords: 'questions, answers, education',
+                    creator: 'Interactive Board App'
+                });
+                
+                // Add title
+                doc.setFontSize(20);
+                doc.setTextColor(40, 40, 40);
+                doc.text('Questions and Answers', 105, 20, { align: 'center' });
+                
+                // Add a line under the title
+                doc.setDrawColor(200, 200, 200);
+                doc.line(20, 25, 190, 25);
+                
+                let yPosition = 40;
+                const lineHeight = 7;
+                const pageHeight = doc.internal.pageSize.height;
+                
+                // Add each question and answer to the PDF
+                questions.forEach((q, index) => {
+                    // Check if we need to add a new page
+                    if (yPosition > pageHeight - 40) {
+                        doc.addPage();
+                        yPosition = 20;
+                    }
+                    
+                    // Add question number
+                    doc.setFontSize(14);
+                    doc.setTextColor(60, 60, 60);
+                    doc.text(`Question ${index + 1}:`, 20, yPosition);
+                    yPosition += lineHeight;
+                    
+                    // Add question text
+                    doc.setFontSize(12);
+                    const questionLines = doc.splitTextToSize(q.question, 170);
+                    doc.text(questionLines, 20, yPosition);
+                    yPosition += (questionLines.length * lineHeight) + 5;
+                    
+                    // Add answer
+                    doc.setFontSize(12);
+                    doc.setTextColor(80, 80, 80);
+                    const answerLines = doc.splitTextToSize(`Answer: ${q.answer}`, 170);
+                    doc.text(answerLines, 20, yPosition);
+                    yPosition += (answerLines.length * lineHeight) + 15;
+                });
+                
+                // Save the PDF
+                doc.save('Questions_and_Answers.pdf');
+            }
+
+            // Event handlers for buttons
+            prevBtn.addEventListener('click', function() {
+                if (currentQuestionIndex > 0) {
+                    currentQuestionIndex--;
+                    showQuestion(currentQuestionIndex);
+                }
+            });
+
+            nextBtn.addEventListener('click', function() {
+                if (currentQuestionIndex < questions.length - 1) {
+                    currentQuestionIndex++;
+                    showQuestion(currentQuestionIndex);
+                }
+            });
+
+            resetBtn.addEventListener('click', function() {
+                currentQuestionIndex = 0;
+                showQuestion(currentQuestionIndex);
+            });
+
+            downloadPdfBtn.addEventListener('click', generatePDF);
+
+            // Initialize
+            showQuestion(currentQuestionIndex);
+        });
+    </script>
+</body>
+</html>
